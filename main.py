@@ -1,4 +1,5 @@
-from adminbank import mainMain
+from adminbank import mainMain, BankCRUD
+import os
 
 class Node:
   def __init__(self, data=None):
@@ -60,6 +61,7 @@ class BankQueueSystem:
     self.queue.enqueue(nomor_antrian)
     self.nasabah_data[nomor_antrian] = nama
     print(f"Nomor antrian Anda adalah: {nomor_antrian}")
+    input()
 
   def admin_login(self, teller, password):
     return self.admin_passwords.get(teller) == password
@@ -67,18 +69,21 @@ class BankQueueSystem:
   def admin_lihat_antrian(self):
     antrian = self.queue.display()
     if not antrian:
+      os.system("cls")
       print("Tidak ada antrian.")
     else:
+      os.system("cls")
       print("Antrian saat ini:", antrian)
+    input()
 
   def admin_panggil_antrian(self, teller):
     nomor_dipanggil = self.queue.dequeue()
     if nomor_dipanggil is None:
       print("Tidak ada antrian yang dipanggil.")
+      input()
     else:
       nama = self.nasabah_data.pop(nomor_dipanggil, "Tidak diketahui")
       print(f"Panggilan Nomor antrian {nomor_dipanggil}, silahkan ke {teller}. Nama: {nama}")
-      # Tampilkan nomor antrian berikutnya jika ada
       next_queue = self.queue.display()
       if next_queue:
         print(f"Nomor antrian berikutnya: {next_queue[0]}")
@@ -88,7 +93,9 @@ class BankQueueSystem:
 
 def main():
   system = BankQueueSystem()
+  system2 = BankCRUD()
   while True:
+    os.system("cls")
     print("\n1. Nasabah Ambil Nomor")
     print("2. Admin Login")
     print("3. Keluar")
@@ -102,10 +109,12 @@ def main():
       password = input(f"Masukkan password admin {teller}: ")
       if system.admin_login(teller, password):
         while True:
+          os.system("cls")
           print(f"\nAdmin {teller} Menu:")
           print("1. Lihat Antrian")
           print("2. Panggil Antrian")
-          print("3. Logout")
+          print("3. Tampilkan Data Nasabah")
+          print("4. Logout")
           admin_pilihan = input("Pilih menu admin: ")
 
           if admin_pilihan == "1":
@@ -113,6 +122,9 @@ def main():
           elif admin_pilihan == "2":
             system.admin_panggil_antrian(teller)
           elif admin_pilihan == "3":
+            os.system('cls')
+            system2.show_nasabah()
+          elif admin_pilihan == "4":
             break
           else:
             print("Pilihan tidak valid.")

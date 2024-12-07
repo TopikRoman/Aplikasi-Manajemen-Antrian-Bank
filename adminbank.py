@@ -120,6 +120,29 @@ class BankCRUD:
             print("\nData Nasabah:")
             for data in nasabahs:
                 print(data)
+            input()
+    def tarik_uang(self, nomor_rekening, jumlah):
+        nasabah = self.nasabah_list.find(nomor_rekening)
+        if nasabah:
+            saldo_sekarang = float(nasabah["setoran_awal"])
+            if jumlah > saldo_sekarang:
+                print("Saldo tidak mencukupi untuk penarikan.")
+            else:
+                nasabah["setoran_awal"] = str(saldo_sekarang - jumlah)
+                self.save_data()
+                print("Penarikan berhasil. Saldo saat ini:", nasabah["setoran_awal"])
+        else:
+            print("Nomor rekening tidak ditemukan.")
+
+    def setor_uang(self, nomor_rekening, jumlah):
+        nasabah = self.nasabah_list.find(nomor_rekening)
+        if nasabah:
+            saldo_sekarang = float(nasabah["setoran_awal"])
+            nasabah["setoran_awal"] = str(saldo_sekarang + jumlah)
+            self.save_data()
+            print("Setoran berhasil. Saldo saat ini:", nasabah["setoran_awal"])
+        else:
+            print("Nomor rekening tidak ditemukan.")
 
 def mainMain():
     system = BankCRUD()
@@ -129,7 +152,9 @@ def mainMain():
         print("2. Lihat Data Nasabah")
         print("3. Edit Data Nasabah")
         print("4. Hapus Data Nasabah")
-        print("5. Keluar")
+        print("5. Tarik Uang")
+        print("6. Setor Uang")
+        print("7. Keluar")
         pilihan = input("Pilih menu: ")
 
         if pilihan == "1":
@@ -170,6 +195,22 @@ def mainMain():
             system.delete_nasabah(nomor_rekening)
 
         elif pilihan == "5":
+            nomor_rekening = input("Masukkan Nomor Rekening: ")
+            try:
+                jumlah = float(input("Masukkan jumlah uang yang ingin ditarik: "))
+                system.tarik_uang(nomor_rekening, jumlah)
+            except ValueError:
+                print("Jumlah harus berupa angka.")
+
+        elif pilihan == "6":
+            nomor_rekening = input("Masukkan Nomor Rekening: ")
+            try:
+                jumlah = float(input("Masukkan jumlah uang yang ingin disetor: "))
+                system.setor_uang(nomor_rekening, jumlah)
+            except ValueError:
+                print("Jumlah harus berupa angka.")
+
+        elif pilihan == "7":
             break
         else:
             print("Pilihan tidak valid.")
