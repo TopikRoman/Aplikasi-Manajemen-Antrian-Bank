@@ -1,3 +1,5 @@
+from adminbank import mainMain
+
 class Node:
   def __init__(self, data=None):
     self.data = data
@@ -42,6 +44,11 @@ class Queue:
   def display(self):
     return self.queue.display()
 
+  def lihat_nomor_berikutnya(self):
+    if self.queue.head is None:
+      return None
+    return self.queue.head.data
+
 class BankQueueSystem:
   def __init__(self):
     self.queue = Queue()
@@ -70,7 +77,14 @@ class BankQueueSystem:
       print("Tidak ada antrian yang dipanggil.")
     else:
       nama = self.nasabah_data.pop(nomor_dipanggil, "Tidak diketahui")
-      print(f"Panggilan Nomer antrian {nomor_dipanggil} silahkan ke {teller}. Nama: {nama}")
+      print(f"Panggilan Nomor antrian {nomor_dipanggil}, silahkan ke {teller}. Nama: {nama}")
+      # Tampilkan nomor antrian berikutnya jika ada
+      next_queue = self.queue.display()
+      if next_queue:
+        print(f"Nomor antrian berikutnya: {next_queue[0]}")
+      else:
+        print("Tidak ada antrian berikutnya.")
+      mainMain()
 
 def main():
   system = BankQueueSystem()
@@ -111,3 +125,4 @@ def main():
 
 if __name__ == "__main__":
   main()
+
