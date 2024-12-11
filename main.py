@@ -82,6 +82,7 @@ class BankQueueSystem:
       print("Tidak ada antrian yang dipanggil.")
       input()
     else:
+      os.system("cls")
       nama = self.nasabah_data.pop(nomor_dipanggil, "Tidak diketahui")
       print(f"Panggilan Nomor antrian {nomor_dipanggil}, silahkan ke {teller}. Nama: {nama}")
       next_queue = self.queue.display()
@@ -89,6 +90,7 @@ class BankQueueSystem:
         print(f"Nomor antrian berikutnya: {next_queue[0]}")
       else:
         print("Tidak ada antrian berikutnya.")
+      input()
       mainMain()
 
 def main():

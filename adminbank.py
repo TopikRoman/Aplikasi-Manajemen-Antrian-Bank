@@ -1,5 +1,7 @@
 import csv
 import random
+import os
+from tabulate import tabulate
 
 class Node:
     def __init__(self, data=None):
@@ -97,29 +99,41 @@ class BankCRUD:
         self.nasabah_list.append(data)
         self.save_data()
         print("Data nasabah berhasil ditambahkan.")
+        input()
 
     def edit_nasabah(self, nomor_rekening, new_data):
         if self.nasabah_list.update(nomor_rekening, new_data):
             self.save_data()
             print("Data nasabah berhasil diperbarui.")
+            input()
         else:
             print("Nomor rekening tidak ditemukan.")
+            input()
 
     def delete_nasabah(self, nomor_rekening):
         if self.nasabah_list.delete(nomor_rekening):
             self.save_data()
             print("Data nasabah berhasil dihapus.")
+            input()
         else:
             print("Nomor rekening tidak ditemukan.")
+            input()
 
     def show_nasabah(self):
         nasabahs = self.nasabah_list.to_list()
         if not nasabahs:
             print("Belum ada data nasabah.")
         else:
+            os.system("cls")
             print("\nData Nasabah:")
-            for data in nasabahs:
-                print(data)
+            headers = ["Nama", "No HP", "No KTP", "Alamat", "Nama Ibu", "Jenis Kelamin", "Setoran Awal", "Nomor Rekening"]
+            data = [
+                [n['nama'], n['no_hp'], n['no_ktp'], n['alamat'], n['nama_ibu'], n['jenis_kelamin'], n['setoran_awal'], n['nomor_rekening']] 
+                for n in nasabahs
+            ]
+
+            # Menampilkan data dalam bentuk tabel
+            print(tabulate(data, headers=headers, tablefmt="grid"))
             input()
     def tarik_uang(self, nomor_rekening, jumlah):
         nasabah = self.nasabah_list.find(nomor_rekening)
@@ -147,6 +161,7 @@ class BankCRUD:
 def mainMain():
     system = BankCRUD()
     while True:
+        os.system("cls")
         print("\nMenu:")
         print("1. Tambah Nasabah")
         print("2. Lihat Data Nasabah")
@@ -158,6 +173,8 @@ def mainMain():
         pilihan = input("Pilih menu: ")
 
         if pilihan == "1":
+            os.system("cls")
+            print("Silahkan Masukkan Data Nasabah")
             nama = input("Nama: ")
             no_hp = input("No HP: ")
             no_ktp = input("No KTP: ")
@@ -181,6 +198,8 @@ def mainMain():
             system.show_nasabah()
 
         elif pilihan == "3":
+            os.system("cls")
+            system.show_nasabah()
             nomor_rekening = input("Masukkan Nomor Rekening: ")
             print("Masukkan data baru (kosongi jika tidak ingin diubah):")
             new_data = {}
@@ -191,10 +210,13 @@ def mainMain():
             system.edit_nasabah(nomor_rekening, new_data)
 
         elif pilihan == "4":
+            os.system("cls")
+            system.show_nasabah()
             nomor_rekening = input("Masukkan Nomor Rekening: ")
             system.delete_nasabah(nomor_rekening)
 
         elif pilihan == "5":
+            system.show_nasabah()
             nomor_rekening = input("Masukkan Nomor Rekening: ")
             try:
                 jumlah = float(input("Masukkan jumlah uang yang ingin ditarik: "))
@@ -203,6 +225,7 @@ def mainMain():
                 print("Jumlah harus berupa angka.")
 
         elif pilihan == "6":
+            system.show_nasabah()
             nomor_rekening = input("Masukkan Nomor Rekening: ")
             try:
                 jumlah = float(input("Masukkan jumlah uang yang ingin disetor: "))
